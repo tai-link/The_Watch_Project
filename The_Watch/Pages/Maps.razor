@@ -1,0 +1,64 @@
+﻿@page "/maps"
+@using Syncfusion.Blazor.Maps
+@using Syncfusion.Blazor
+
+<div>
+<SfMaps Height="50%" Width="100%">
+    <MapsZoomSettings Enable="false" ZoomFactor="13"></MapsZoomSettings>
+    <MapsCenterPosition Latitude="35.1154711" Longitude="-89.9568190"></MapsCenterPosition>
+    <MapsLayers>
+        <MapsLayer UrlTemplate="@UrlTemplate" TValue="string">
+            @* Add marker *@
+            <MapsMarkerSettings>
+                <MapsMarker Visible="true" Height="25" Width="15" DataSource="Cities" TValue="MapMarker">
+                </MapsMarker>
+            </MapsMarkerSettings>
+            @* Add navigation line *@
+@*            <MapsNavigationLines>
+                <MapsNavigationLine Visible="true" Color="blue" Angle="0.1" Latitude="new double[]{34.060620, 40.724546}"
+                                    Longitude="new double[]{-118.330491,-73.850344}">
+                </MapsNavigationLine>
+            </MapsNavigationLines>*@
+        </MapsLayer>
+    </MapsLayers>
+</SfMaps>
+</div>
+<br />
+<button onclick="addMarkers" class="btn-lg"></button>
+
+@code 
+{
+    SfMaps sfMaps;
+  
+
+    
+
+    public class MapMarker
+    {
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public string Name { get; set; }
+    }
+    
+    private List<MapMarker> Cities = new List<MapMarker> {
+        new MapMarker { Latitude = 35.11547118078336, Longitude = -89.9568190513077,  Name="1" },
+        new MapMarker { Latitude = 35.1154711807812, Longitude = -89.9568190523,  Name="2" }
+    };
+    
+    public string UrlTemplate;
+    protected override async Task OnInitializedAsync()
+    {
+        UrlTemplate = await SfMaps.GetBingUrlTemplate("https://dev.virtualearth.net/REST/V1/Imagery/Metadata/RoadOnDemand?output=json&uriScheme=https&key=AoAIEuinT001Lf8YNOAwCvs11A7YlZb2usSWdsvsBjQXCVD_z2ENxHKebUNdfNbf");
+    }
+
+    private void addMarkers()
+    {
+        Cities.Add(new MapMarker { Latitude = 35.1154711824, Longitude = -89.956819022, Name = "3" });
+        sfMaps.Refresh();
+    }
+
+
+}
+
+
+
